@@ -3,6 +3,14 @@
 cmake_minimum_required(VERSION 3.11)
 project(flexasio DESCRIPTION "FlexASIO Universal ASIO Driver Superbuild")
 include(ExternalProject)
+
+option(FLEXASIO_WASAPI_WDMKS_ONLY "Build PortAudio with only WASAPI and WDM-KS" OFF)
+if(FLEXASIO_WASAPI_WDMKS_ONLY)
+    set(FLEXASIO_LEGACY_BACKENDS OFF)
+else()
+    set(FLEXASIO_LEGACY_BACKENDS ON)
+endif()
+
 set(INTERNAL_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/install")
 set(CMAKE_ARGS
     "-DCMAKE_INSTALL_PREFIX=${INTERNAL_INSTALL_PREFIX}"
@@ -29,7 +37,7 @@ ExternalProject_Add(
     cxxopts
     SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/cxxopts"
     INSTALL_DIR "${INTERNAL_INSTALL_PREFIX}"
-	CMAKE_ARGS ${CMAKE_ARGS}
+	CMAKE_ARGS ${CMAKE_ARGS} -DCXXOPTS_BUILD_EXAMPLES=OFF -DCXXOPTS_BUILD_TESTS=OFF
     BUILD_ALWAYS
     EXCLUDE_FROM_ALL
 )
@@ -53,6 +61,11 @@ ExternalProject_Add(
 	CMAKE_ARGS ${CMAKE_ARGS}
 		-DPA_ENABLE_DEBUG_OUTPUT=ON
 		-DPA_BUILD_SHARED_LIBS=ON
+		-DPA_USE_ASIO=OFF
+		-DPA_USE_DS=${FLEXASIO_LEGACY_BACKENDS}
+		-DPA_USE_WMME=${FLEXASIO_LEGACY_BACKENDS}
+		-DPA_USE_WASAPI=ON
+		-DPA_USE_WDMKS=ON
 		"-DCMAKE_PROJECT_PortAudio_INCLUDE=${CMAKE_CURRENT_LIST_DIR}/portaudio.cmake"
         # The CMAKE_INSTALL_INCLUDEDIR built-in was introduced in CMake 3.14.
         # Sadly current Visual Studio (16.11.3) ships with CMake 3.13, so we have to work around the missing built-in.

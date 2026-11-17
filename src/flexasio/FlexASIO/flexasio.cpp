@@ -74,10 +74,10 @@ namespace flexasio {
 
 		HostApi SelectDefaultHostApi() {
 			Log() << "Selecting default PortAudio host API";
-			// The default API used by PortAudio is MME.
-			// It works, but DirectSound seems like the best default (it reports a more sensible number of channels, for example).
-			// So let's try that first, and fall back to whatever the PortAudio default is if DirectSound is not available somehow.
+			// Prefer DirectSound when it is built in. Builds without DirectSound prefer WASAPI.
 			auto hostApiIndex = Pa_HostApiTypeIdToHostApiIndex(paDirectSound);
+			if (hostApiIndex == paHostApiNotFound)
+				hostApiIndex = Pa_HostApiTypeIdToHostApiIndex(paWASAPI);
 			if (hostApiIndex == paHostApiNotFound)
 				hostApiIndex = Pa_GetDefaultHostApi();
 			if (hostApiIndex < 0)

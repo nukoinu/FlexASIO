@@ -21,6 +21,29 @@ relies on many small subprojects.
 Note that the ASIOUtil build system will download the [ASIO SDK][] for you
 automatically at configure time.
 
+### x64 build with WASAPI and WDM-KS
+
+Install the Visual Studio C++ desktop tools, including ATL and a Windows SDK,
+and make Python available on `PATH` for the libsndfile build. From an x64
+Visual Studio developer shell, run these commands at the repository root:
+
+```powershell
+git submodule update --init --recursive
+$env:CMAKE_POLICY_VERSION_MINIMUM = '3.5' # For the pinned dependencies with CMake 4
+cmake -S src -B src/out/build/x64-wasapi-wdmks -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo "-DCMAKE_INSTALL_PREFIX=$PWD/src/out/install/x64-wasapi-wdmks" -DFLEXASIO_WASAPI_WDMKS_ONLY=ON
+cmake --build src/out/build/x64-wasapi-wdmks
+cmake --install src/out/build/x64-wasapi-wdmks
+```
+
+This build defaults to WASAPI shared mode. An existing `FlexASIO.toml` that
+explicitly selects DirectSound or MME must select an available backend, such
+as `backend = "Windows WASAPI"`. For an x64 baseline build, use a separate
+build directory and set `FLEXASIO_WASAPI_WDMKS_ONLY=OFF`.
+
+The staged `bin` directory contains `FlexASIOTest.exe` for testing the local
+DLL directly and `PortAudioDevices.exe` for checking the available backends.
+PDB files can be kept separately when copying or archiving the binaries.
+
 ## Packaging
 
 The following command will generate the installer package for you:
