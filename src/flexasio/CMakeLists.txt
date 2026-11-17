@@ -36,6 +36,15 @@ add_definitions(
 	-DBUILD_PLATFORM="${FLEXASIO_PLATFORM}"
 )
 
+if(FLEXASIO_RELEASE_VERSION)
+	include("${CMAKE_CURRENT_LIST_DIR}/../release-version.cmake")
+	string(REPLACE "." "," FLEXASIO_FILE_VERSION "${FLEXASIO_NUMERIC_VERSION}")
+	add_definitions(
+		-DFLEXASIO_RELEASE_VERSION="${FLEXASIO_RELEASE_VERSION}"
+		-DFLEXASIO_FILE_VERSION=${FLEXASIO_FILE_VERSION}
+	)
+endif()
+
 add_subdirectory(../dechamps_CMakeUtils/version version EXCLUDE_FROM_ALL)
 
 add_subdirectory(FlexASIOUtil EXCLUDE_FROM_ALL)
