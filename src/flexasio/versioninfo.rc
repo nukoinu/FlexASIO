@@ -3,19 +3,29 @@
 #include <dechamps_CMakeUtils/version_stamp.h>
 
 VS_VERSION_INFO VERSIONINFO
+#ifdef FLEXASIO_RELEASE_VERSION
+	FILEVERSION FLEXASIO_FILE_VERSION
+	PRODUCTVERSION FLEXASIO_FILE_VERSION
+#endif
 {
 	BLOCK "StringFileInfo"
 	{
-		BLOCK "04090000" // US. English, ASCII
+		BLOCK "040904B0" // US English, Unicode
 		{
 			VALUE "FileDescription", PROJECT_DESCRIPTION " (" BUILD_CONFIGURATION " " BUILD_PLATFORM ")"
 			VALUE "LegalCopyright", "MIT License, Copyright (c) 2018 Etienne Dechamps <etienne@edechamps.fr>"
 			VALUE "ProductName", "FlexASIO https://github.com/dechamps/FlexASIO"
+#ifdef FLEXASIO_RELEASE_VERSION
+			VALUE "Comments", DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION_DIRTY " built on " DECHAMPS_CMAKEUTILS_BUILD_TIME
+			VALUE "FileVersion", FLEXASIO_RELEASE_VERSION
+			VALUE "ProductVersion", FLEXASIO_RELEASE_VERSION
+#else
 			VALUE "ProductVersion", DECHAMPS_CMAKEUTILS_GIT_DESCRIPTION_DIRTY " built on " DECHAMPS_CMAKEUTILS_BUILD_TIME
+#endif
 		}
 	}
 	BLOCK "VarFileInfo"
 	{
-		VALUE "Translation", 0x0409, 0x0000
+		VALUE "Translation", 0x0409, 1200
 	}
 }

@@ -5,6 +5,7 @@ project(flexasio DESCRIPTION "FlexASIO Universal ASIO Driver Superbuild")
 include(ExternalProject)
 
 option(FLEXASIO_WASAPI_WDMKS_ONLY "Build PortAudio with only WASAPI and WDM-KS" OFF)
+set(FLEXASIO_RELEASE_VERSION "" CACHE STRING "FlexASIO release version embedded in the binaries")
 if(FLEXASIO_WASAPI_WDMKS_ONLY)
     set(FLEXASIO_LEGACY_BACKENDS OFF)
 else()
@@ -121,7 +122,7 @@ ExternalProject_Add(
     SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/flexasio"
     BUILD_ALWAYS TRUE USES_TERMINAL_BUILD TRUE
     INSTALL_DIR "${INTERNAL_INSTALL_PREFIX}"
-    CMAKE_ARGS ${CMAKE_ARGS}
+    CMAKE_ARGS ${CMAKE_ARGS} "-DFLEXASIO_RELEASE_VERSION=${FLEXASIO_RELEASE_VERSION}"
     DEPENDS tinytoml portaudio dechamps_cpputil dechamps_cpplog dechamps_ASIOUtil ASIOTest
 )
 

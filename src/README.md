@@ -46,6 +46,17 @@ PDB files can be kept separately when copying or archiving the binaries.
 
 ## Packaging
 
+For the x64 WASAPI and WDM-KS package, add `-DFLEXASIO_RELEASE_VERSION=1.20`
+to the CMake configure command above, then build and stage the binaries. From
+the repository root, run the following with Inno Setup 6.3 or later available.
+
+```powershell
+cmake -DFLEXASIO_X64_BUILD_DIR=src/out/build/x64-wasapi-wdmks -P src/installer.cmake
+```
+
+The installer in `src/out/installer` uses the release version from the build
+cache. `-DInnoSetup_iscc_EXECUTABLE=<path>` can supply a portable compiler.
+
 The following command will generate the installer package for you:
 
 ```
